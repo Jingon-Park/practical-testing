@@ -2,6 +2,7 @@ package sample.cafekiosk.unit;
 
 import static org.assertj.core.api.Assertions.*;
 
+import java.beans.BeanDescriptor;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
 import sample.cafekiosk.unit.beverage.Americano;
@@ -60,6 +61,28 @@ public class CafeKioskTest {
 
     }
 
+    @Test
+    void addSeveralBeverages() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
 
+        cafeKiosk.add(americano, 2);
 
+        assertThat(cafeKiosk.getBeverages().get(0)).isEqualTo(americano);
+        assertThat(cafeKiosk.getBeverages().get(1)).isEqualTo(americano);
+
+        assertThat(cafeKiosk.getBeverages()).hasSize(2);
+
+    }
+
+    @Test
+    void addZeroBeverages() {
+        CafeKiosk cafeKiosk = new CafeKiosk();
+        Americano americano = new Americano();
+
+        assertThatThrownBy(() -> {
+            cafeKiosk.add(americano, 0);
+        }).isInstanceOf(IllegalArgumentException.class)
+            .hasMessage("음료는 1잔 이상 주문할 수 있습니다.");
+    }
 }
