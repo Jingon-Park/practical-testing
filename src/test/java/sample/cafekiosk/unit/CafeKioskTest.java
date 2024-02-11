@@ -5,6 +5,7 @@ import static org.assertj.core.api.Assertions.*;
 import java.beans.BeanDescriptor;
 import java.time.LocalDateTime;
 import org.assertj.core.api.Assertions;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import sample.cafekiosk.unit.beverage.Americano;
 import sample.cafekiosk.unit.beverage.Latte;
@@ -26,6 +27,7 @@ public class CafeKioskTest {
 
     }
 
+    @DisplayName("음료를 1개 추가할 수 있다.")
     @Test
     void add() {
         CafeKiosk cafeKiosk = new CafeKiosk();
@@ -126,6 +128,13 @@ public class CafeKioskTest {
         assertThat(order.getBeverages().get(0)).isEqualTo(americano);
     }
 
+
+    /**
+     * 서비스의 도메인을 사용하면 좋음 EX. 영업 시간
+     * 테스트현상을 중점으로 기술하는 것은 좋지 못함 EX. 특정 시간 이전에 주문을 생성하면 "실패한다". 등등
+     * 테스트 행위에 대한 결과를 같이 display name에 기술한다.
+     */
+    @DisplayName("영업 시간 이외에 주문을 생성할 수 없다.")
     @Test
     void createOrderWithOutsideOpenTime() {
         CafeKiosk cafeKiosk = new CafeKiosk();
