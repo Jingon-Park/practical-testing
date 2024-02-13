@@ -65,8 +65,18 @@ public class CafeKioskTest {
 
     }
 
+    /**
+     * BDD(Behavior Driven Development)
+     * TDD에서 파상된 개발 방법으로 함수 단위의 테스트 보다는 시나리오에 기반한 TC에 집중하여 테스트를 진행
+     * 개발자가 아닌 사람이 봐도 이해할 수 있는 수준으로 추상화 진행
+     * Given = 시나리오 진행에 필요한 모든 준비 과정
+     * When = 시나리오 행동 진행, 주로 1줄로 끝나는 경우가 많음
+     * Then = 시나리오 진행 결과 검증
+     */
+    @DisplayName("주문 목록에 담긴 상품의 총 금액을 계산할 수 있다.")
     @Test
     void calculateTotalPrice() {
+        //given
         CafeKiosk cafeKiosk = new CafeKiosk();
         Americano americano = new Americano();
         Latte latte = new Latte();
@@ -74,8 +84,10 @@ public class CafeKioskTest {
         cafeKiosk.add(americano);
         cafeKiosk.add(latte);
 
+        //when
         int totalPrice = cafeKiosk.calculateTotalPrice();
 
+        //then
         assertThat(totalPrice).isEqualTo(8500);
     }
 
