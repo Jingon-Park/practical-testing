@@ -16,5 +16,9 @@
 * 익스트림 프로그래밍
 * 스크럼, 칸반
 
-
+## 키워드 정리-4
+* @DisplayName - 도메인 정책, 용어를 사용하여 명확한 문장으로 작성
+* Given/When/Then
+* TDD vs BDD
+* Junit vs Spock
 
