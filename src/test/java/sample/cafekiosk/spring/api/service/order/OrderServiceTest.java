@@ -20,6 +20,8 @@ import sample.cafekiosk.spring.domain.orderproduct.OrderProductRepository;
 import sample.cafekiosk.spring.domain.product.Product;
 import sample.cafekiosk.spring.domain.product.ProductRepository;
 import sample.cafekiosk.spring.domain.product.ProductType;
+import sample.cafekiosk.spring.domain.stock.Stock;
+import sample.cafekiosk.spring.domain.stock.StockRepository;
 
 
 @ActiveProfiles("test")
@@ -36,12 +38,14 @@ class OrderServiceTest {
     @Autowired
     OrderProductRepository orderProductRepository;
 
+    @Autowired
+    StockRepository stockRepository;
+
     @AfterEach
     void tearDown() {
         orderProductRepository.deleteAllInBatch();
         orderRepository.deleteAllInBatch();
         productRepository.deleteAllInBatch();
-
     }
 
     @DisplayName("상품 목록을 전달 받아 주문을 생성한다.")
@@ -80,6 +84,59 @@ class OrderServiceTest {
             );
     }
 
+    @DisplayName("재고와 관련된 상품이 포함되어 잇는 주문번호 리스트를 받아 주문을 생성한다.")
+    @Test
+    void orderCreateWithStockTest() {
+
+        //given
+        LocalDateTime registeredDateTime = LocalDateTime.now();
+
+        Product product1 = createProduct(HANDMADE, "001", 1000);
+        Product product2 = createProduct(BAKERY, "002", 2000);
+        Product product3 = createProduct(BOTTLE, "003", 3000);
+
+        productRepository.saveAll(List.of(product1, product2, product3));
+
+        Stock stock1 = Stock.create("002", 2);
+        Stock stock2 = Stock.create("003", 2);
+
+        stockRepository.saveAll(List.of(stock1, stock2));
+
+        OrderCreateRequest request = OrderCreateRequest.builder()
+            .productNumbers(List.of("001", "002", "002", "003"))
+            .build();
+        //when
+
+        OrderResponse orderResponse = orderService.createOrder(request, registeredDateTime);
+
+        System.out.println(orderResponse.getTotalPrice());
+
+        //then
+        assertThat(orderResponse.getId()).isNotNull();
+        assertThat(orderResponse)
+            .extracting("registeredDataTime", "totalPrice")
+            .contains(registeredDateTime, 8000);
+        assertThat(orderResponse.getProducts()).hasSize(4)
+            .extracting("productNumber", "price")
+            .containsExactlyInAnyOrder(
+                tuple("001", 1000),
+                tuple("002", 2000),
+                tuple("002", 2000),
+                tuple("003", 3000)
+            );
+
+        List<Stock> stocks = stockRepository.findAll();
+
+        assertThat(stocks).hasSize(2)
+            .extracting("productNumber", "quantity")
+            .containsExactlyInAnyOrder(
+                tuple("002", 0),
+                tuple("003", 1)
+            );
+    }
+
+
+
     @DisplayName("상품 목록에 중복된 ProductNumber 를 전달 받아 주문을 생성한다.")
     @Test
     void orderCreateWithDuplicateProductNumberTest() {
@@ -114,10 +171,9 @@ class OrderServiceTest {
                 tuple("001", 1000)
 
             );
-
-
-
     }
+
+
 
     private Product createProduct(ProductType type, String productNumber, int price) {
         return Product.builder()
