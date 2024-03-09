@@ -14,6 +14,7 @@ import sample.cafekiosk.spring.domain.order.OrderRepository;
 import sample.cafekiosk.spring.domain.product.Product;
 import sample.cafekiosk.spring.domain.product.ProductRepository;
 import sample.cafekiosk.spring.domain.product.ProductType;
+import sample.cafekiosk.spring.domain.stock.Stock;
 import sample.cafekiosk.spring.domain.stock.StockRepository;
 
 @Service
@@ -32,13 +33,29 @@ public class OrderService {
         //재고 차감이 필요한 상품 필터
         List<String> stockProductNumbers = products.stream()
             .filter(product -> ProductType.containsStockType(product.getType()))
-            .map(product -> product.getProductNumber())
+            .map(Product::getProductNumber)
             .collect(Collectors.toList());
 
         //재고 엔티티 조회
+        List<Stock> stocks = stockRepository.findAllByProductNumberIn(stockProductNumbers);
 
+        Map<String, Stock> stockMap = stocks.stream()
+            .collect(Collectors.toMap(Stock::getProductNumber, p -> p));
         //상품별 갯수 확인
+        Map<String, Long> productCountingMap = stockProductNumbers.stream()
+            .collect(Collectors.groupingBy(p -> p, Collectors.counting()));
+
         //재고 차감
+        for (String stockProductNumber : stockProductNumbers) {
+            Stock stock = stockMap.get(stockProductNumber);
+            int quantity = productCountingMap.get(stockProductNumber).intValue();
+
+            if (stock.isQuantityLessThen(quantity)) {
+                throw new IllegalArgumentException("재고가 부족한 상품이 있습니다.");
+            }
+            stock.deductQuantity(quantity);
+
+        }
 
         Order order = Order.create(products, registeredDataTime);
         Order savedOrder = orderRepository.save(order);
