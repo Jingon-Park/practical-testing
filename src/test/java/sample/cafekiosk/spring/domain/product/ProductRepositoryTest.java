@@ -23,27 +23,9 @@ class ProductRepositoryTest {
     @DisplayName("원하는 판매 상태인 Product만 검색")
     void findAllBySellingStatusInTest() {
         //given
-        Product product1 = Product.builder()
-            .productNumber("001")
-            .sellingStatus(SELLING)
-            .type(HANDMADE)
-            .name("아메리카노")
-            .price(4000)
-            .build();
-        Product product2 = Product.builder()
-            .productNumber("002")
-            .sellingStatus(HOLD)
-            .type(HANDMADE)
-            .name("라때")
-            .price(4500)
-            .build();
-        Product product3 = Product.builder()
-            .productNumber("003")
-            .sellingStatus(STOP_SELLING)
-            .type(HANDMADE)
-            .name("팥빙수")
-            .price(7000)
-            .build();
+        Product product1 = createProduct("001", SELLING, HANDMADE, "아메리카노", 4000);
+        Product product2 = createProduct("002", HOLD, HANDMADE, "라때", 4500);
+        Product product3 = createProduct("003", STOP_SELLING, HANDMADE, "팥빙수", 7000);
 
         productRepository.saveAll(List.of(product1, product2, product3));
         //when
@@ -65,27 +47,9 @@ class ProductRepositoryTest {
     @DisplayName("상품 번호로 싱품을 조회한다.")
     void findAllByProductNumberInTest() {
         //given
-        Product product1 = Product.builder()
-            .productNumber("001")
-            .sellingStatus(SELLING)
-            .type(HANDMADE)
-            .name("아메리카노")
-            .price(4000)
-            .build();
-        Product product2 = Product.builder()
-            .productNumber("002")
-            .sellingStatus(HOLD)
-            .type(HANDMADE)
-            .name("라때")
-            .price(4500)
-            .build();
-        Product product3 = Product.builder()
-            .productNumber("003")
-            .sellingStatus(STOP_SELLING)
-            .type(HANDMADE)
-            .name("팥빙수")
-            .price(7000)
-            .build();
+        Product product1 = createProduct("001", SELLING, HANDMADE, "아메리카노", 4000);
+        Product product2 = createProduct("002", HOLD, HANDMADE, "라때", 4500);
+        Product product3 = createProduct("003", STOP_SELLING, HANDMADE, "팥빙수", 7000);
 
         productRepository.saveAll(List.of(product1, product2, product3));
         //when
@@ -102,4 +66,45 @@ class ProductRepositoryTest {
             );
     }
 
+
+    @DisplayName("가장 마지막에 저장된 Product의 product_number 값을 구한다.")
+    @Test
+    void findLatestProductNumber() {
+        //given
+        String targetProductNumber = "003";
+        Product product1 = createProduct("001", SELLING, HANDMADE, "아메리카노", 4000);
+        Product product2 = createProduct("002", HOLD, HANDMADE, "라때", 4500);
+        Product product3 = createProduct(targetProductNumber, STOP_SELLING, HANDMADE, "팥빙수", 7000);
+
+        this.productRepository.saveAll(List.of(product1, product2, product3));
+
+        //when
+        String latestProductNumber = this.productRepository.findLatestProductNumber();
+
+        //then
+
+        assertThat(latestProductNumber).isEqualTo(targetProductNumber);
+    }
+
+    @DisplayName("가장 마지막에 저장된 Product의 product_number 값을 구할때, Product가 없으면 null을 반환한다.")
+    @Test
+    void findLatestProductNumberWhenProductEmpty() {
+        //when
+        String latestProductNumber = this.productRepository.findLatestProductNumber();
+
+        //then
+
+        assertThat(latestProductNumber).isNull();
+    }
+
+    private Product createProduct(String productNumber, ProductSellingStatus status,
+        ProductType productType, String name, int price) {
+        return Product.builder()
+            .productNumber(productNumber)
+            .sellingStatus(status)
+            .type(productType)
+            .name(name)
+            .price(price)
+            .build();
+    }
 }

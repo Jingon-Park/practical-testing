@@ -1,6 +1,5 @@
 package sample.cafekiosk.spring.api.service.order;
 
-import jakarta.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.List;
@@ -8,6 +7,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import sample.cafekiosk.spring.api.service.order.request.OrderCreateRequest;
 import sample.cafekiosk.spring.api.service.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.order.Order;
@@ -18,8 +18,17 @@ import sample.cafekiosk.spring.domain.product.ProductType;
 import sample.cafekiosk.spring.domain.stock.Stock;
 import sample.cafekiosk.spring.domain.stock.StockRepository;
 
+/**
+ * Transactional 의 readOnly 옵션을 true로 설정하면 CRUD 작업 중 read 동작 수행한다.
+ * 즉 JPA 관점에서 스냅샷과 변경 감지로직이 없어, 성능상의 이점이 있다.
+ *
+ * CQRS -> command /read 를 분리하여 관리
+ * command(CUD)작업을 수행할때에는 Transactional readOnly false를 주고
+ * read 작업을 수행하때에는 readOnly 를 true로 주어 분리할 수있다.
+ * 이때, master와 slave db를 분리할 수 있어 장애를 따로 관리할 수 있음
+ */
 @Service
-@Transactional
+@Transactional(readOnly = true)
 @RequiredArgsConstructor
 public class OrderService {
 
@@ -31,6 +40,7 @@ public class OrderService {
      * 재고 감소 라는 문제는 동시성 문제에 대해서 고민해야한다.
      * optimistic lock / pessimistic lock 과 같은 lock 개념 사용을 고려
      */
+    @Transactional
     public OrderResponse createOrder(OrderCreateRequest request, LocalDateTime registeredDataTime) {
 
         List<String> productNumbers = request.getProductNumbers();
