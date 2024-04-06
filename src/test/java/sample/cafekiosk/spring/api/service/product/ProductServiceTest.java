@@ -51,7 +51,7 @@ class ProductServiceTest {
             .build();
 
         //when
-        ProductResponse productResponse = this.productService.createProduct(productCreateRequest);
+        ProductResponse productResponse = this.productService.createProduct(productCreateRequest.toServiceRequest());
 
         //then
         assertThat(productResponse).extracting(
@@ -90,7 +90,7 @@ class ProductServiceTest {
             .build();
 
         //when
-        ProductResponse productResponse = this.productService.createProduct(productCreateRequest);
+        ProductResponse productResponse = this.productService.createProduct(productCreateRequest.toServiceRequest());
 
         //then
         assertThat(productResponse).extracting(
