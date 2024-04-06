@@ -22,3 +22,22 @@
 * TDD vs BDD
 * Junit vs Spock
 
+## 키워드 정리-5
+* Layered Architecture
+* Hexagonal Architecture
+* 단위 테스트 vs 통합 테스트
+* Ioc, DI, AOP
+* ORM, Hibernate, 패러다임의 불일치
+* Spring JPA
+  * QueryDSL
+  * @SpringBootTest vs @DataJpaTest
+  * @SpringBootTest vs @WebMvcTest
+  * @Transaction(readOnly = true)
+  * Optimistic Lock, Pessimistic Lock
+  * CQRS
+* @RestControllerAdvice, @ExceptionHandler
+* Spring bean validation
+  * @NotNull, @NotEmpty, @NotBlank, …
+* WebMvcTest
+* MockMvc
+* Mockito, Mock, MockBean
