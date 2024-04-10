@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
 import sample.cafekiosk.spring.domain.BaseEntity;
@@ -39,8 +40,9 @@ public class Order extends BaseEntity {
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderProduct> orderProducts;
 
-    private Order (List<Product> products, LocalDateTime registeredDataTime) {
-        this.orderStatus = OrderStatus.INIT;
+   @Builder
+    private Order (List<Product> products, OrderStatus orderStatus, LocalDateTime registeredDataTime) {
+        this.orderStatus = orderStatus;
         this.totalPrice = calculateTotalPrice(products);
         this.registeredDataTime = registeredDataTime;
         this.orderProducts = products.stream().map(product -> new OrderProduct(this, product))
@@ -54,7 +56,16 @@ public class Order extends BaseEntity {
 
 
     public static Order create(List<Product> products, LocalDateTime registeredDataTime) {
-        return new Order(products, registeredDataTime);
+        return Order.builder()
+            .products(products)
+            .orderStatus(OrderStatus.INIT)
+            .registeredDataTime(registeredDataTime)
+            .build();
+    }
+
+
+    public void setOrderStatus(OrderStatus orderStatus) {
+        this.orderStatus = orderStatus;
     }
 
 
