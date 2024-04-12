@@ -36,6 +36,7 @@ class OrderRepositoryTest {
 
     @AfterEach
     void tearDown() {
+        this.productRepository.deleteAllInBatch();
         this.orderRepository.deleteAllInBatch();
 
     }
@@ -47,7 +48,8 @@ class OrderRepositoryTest {
         List<Product> products = productRepository.findAll();
 
         LocalDateTime localDateTime = LocalDateTime.of(2024, Month.APRIL, 1, 12, 30);
-        Order order = Order.create(products, localDateTime);
+        Order order = Order.builder().products(products).orderStatus(OrderStatus.PAYMENT_COMPLETED)
+            .registeredDataTime(localDateTime).build();
 
         LocalDate localDate = LocalDate.of(2024, Month.APRIL, 1);
         order.setOrderStatus(OrderStatus.PAYMENT_COMPLETED);

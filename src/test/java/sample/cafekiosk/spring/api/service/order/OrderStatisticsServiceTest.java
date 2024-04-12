@@ -1,15 +1,23 @@
 package sample.cafekiosk.spring.api.service.order;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.Mockito.*;
 import static sample.cafekiosk.spring.domain.product.ProductSellingStatus.SELLING;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
+import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import sample.cafekiosk.spring.client.mail.MailClient;
+import sample.cafekiosk.spring.domain.history.MailSendHistory;
 import sample.cafekiosk.spring.domain.history.MailSendHistoryRepository;
 import sample.cafekiosk.spring.domain.order.Order;
 import sample.cafekiosk.spring.domain.order.OrderRepository;
@@ -22,6 +30,7 @@ import sample.cafekiosk.spring.domain.product.ProductType;
 @SpringBootTest
 class OrderStatisticsServiceTest {
 
+    @Autowired
     private OrderStatisticsService orderStatisticsService;
 
     @Autowired
@@ -36,8 +45,12 @@ class OrderStatisticsServiceTest {
     @Autowired
     private MailSendHistoryRepository mailSendHistoryRepository;
 
+    @MockBean
+    private MailClient mailClient;
+
     @AfterEach
     void tearDown() {
+        orderProductRepository.deleteAllInBatch();
         orderRepository.deleteAllInBatch();
         productRepository.deleteAllInBatch();
         mailSendHistoryRepository.deleteAllInBatch();
@@ -56,23 +69,39 @@ class OrderStatisticsServiceTest {
         List<Product> products = List.of(product1, product2, product3);
 
         productRepository.saveAll(products);
-        Order order1 = createPaymentedOrder(orderTime, products);
+        Order order1 = createPaymentedOrder(LocalDateTime.of(2024, 4, 2, 0, 0), products);
         Order order2 = createPaymentedOrder(orderTime, products);
         Order order3 = createPaymentedOrder(orderTime, products);
-        List<Order> orders = List.of(order1, order2, order3);
+        Order order4 = createPaymentedOrder(LocalDateTime.of(2024, 3, 31, 0, 0), products);
+
+        orderRepository.saveAll(List.of(order1, order2, order3, order4));
+
+        //stubbing
+        when(mailClient.sendEmail(any(String.class), any(String.class), any(String.class), any(
+            String.class))).thenReturn(true);
 
         //when
+        boolean result = orderStatisticsService.sendOrderStatisticsMail(LocalDate.of(2024, 04, 01),
+            "test@test.com");
 
         //then
+        assertThat(result).isTrue();
+
+        List<MailSendHistory> histories = mailSendHistoryRepository.findAll();
+        assertThat(histories).hasSize(1)
+            .extracting("content")
+            .contains("총 매출액은 12000원 입니다.");
 
     }
 
     private Order createPaymentedOrder(LocalDateTime orderTime, List<Product> products) {
-        return Order.builder()
+        Order order = Order.builder()
             .products(products)
             .orderStatus(OrderStatus.PAYMENT_COMPLETED)
             .registeredDataTime(orderTime)
             .build();
+
+        return orderRepository.save(order);
     }
 
 

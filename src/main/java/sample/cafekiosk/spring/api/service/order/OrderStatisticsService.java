@@ -1,7 +1,6 @@
 package sample.cafekiosk.spring.api.service.order;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +16,7 @@ public class OrderStatisticsService {
     private final OrderRepository orderRepository;
 
     private final MailService mailService;
-    public void sendOrderStatisticsMail(LocalDate localDate, String email) {
+    public boolean sendOrderStatisticsMail(LocalDate localDate, String email) {
 
         //날짜의 결제 완료된 주문 목록을 가져온다
         List<Order> orders = orderRepository.findOrdersBy(localDate.atStartOfDay(),
@@ -40,6 +39,8 @@ public class OrderStatisticsService {
         if (!result) {
             throw new IllegalArgumentException("매출 통계 메일 발송에 실패했습니다.");
         }
+
+        return true;
 
     }
 

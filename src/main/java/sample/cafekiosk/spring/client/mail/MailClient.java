@@ -10,6 +10,10 @@ public class MailClient {
     public boolean sendEmail(String fromEmail, String toEmail, String subject, String content) {
 
         log.info("메일 발송!!");
+        if (1 == 1) {
+
+            throw new IllegalArgumentException("메일 전송");
+        }
         return true;
     }
 
