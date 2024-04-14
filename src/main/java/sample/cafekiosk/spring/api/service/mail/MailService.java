@@ -12,10 +12,10 @@ import sample.cafekiosk.spring.domain.history.MailSendHistoryRepository;
 public class MailService {
 
     @Autowired
-    MailClient mailClient;
+    private final MailClient mailClient;
 
     @Autowired
-    MailSendHistoryRepository mailSendHistoryRepository;
+    private final MailSendHistoryRepository mailSendHistoryRepository;
 
     public boolean sendEmail(String fromEmail, String toEmail, String subject, String content) {
 
