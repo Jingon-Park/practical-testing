@@ -8,6 +8,7 @@ import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
@@ -21,11 +22,11 @@ import sample.cafekiosk.spring.domain.history.MailSendHistoryRepository;
 class MailServiceTest {
 
 
-//    @Mock
-//    private MailClient mailClient;
-
-    @Spy
+    @Mock
     private MailClient mailClient;
+
+//    @Spy
+//    private MailClient mailClient;
 
     @Mock
     private MailSendHistoryRepository mailSendHistoryRepository;
@@ -44,9 +45,14 @@ class MailServiceTest {
         //MailService mailService = new MailService(mailClient, mailSendHistoryRepository);
 //        when(mailService.sendEmail(anyString(), anyString(), anyString(), anyString())).thenReturn(
 //            true);
-        doReturn(true)
-            .when(mailClient)
-            .sendEmail(anyString(), anyString(), anyString(), anyString());
+//        doReturn(true)
+//            .when(mailClient)
+//            .sendEmail(anyString(), anyString(), anyString(), anyString());
+        /**
+         * Test 코드의 Given 절에 Mockito의 when이 있어, Mockito를 상속한 BDDMockito를 사용하여 BDD스타일로 작성 가능
+         */
+        BDDMockito.given(mailService.sendEmail(anyString(), anyString(), anyString(), anyString()))
+            .willReturn(true);
 
 
 
