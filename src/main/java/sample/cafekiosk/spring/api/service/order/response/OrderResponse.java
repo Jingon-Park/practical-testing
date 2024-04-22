@@ -18,16 +18,16 @@ public class OrderResponse {
     private Long id;
     private OrderStatus orderStatus;
     private int totalPrice;
-    private LocalDateTime registeredDataTime;
+    private LocalDateTime registeredDateTime;
     private List<ProductResponse> products;
 
     @Builder
     private OrderResponse(Long id, OrderStatus orderStatus, int totalPrice,
-        LocalDateTime registeredDataTime, List<ProductResponse> products) {
+        LocalDateTime registeredDateTime, List<ProductResponse> products) {
         this.id = id;
         this.orderStatus = orderStatus;
         this.totalPrice = totalPrice;
-        this.registeredDataTime = registeredDataTime;
+        this.registeredDateTime = registeredDateTime;
         this.products = products;
     }
 
@@ -37,7 +37,7 @@ public class OrderResponse {
             .id(order.getId())
             .orderStatus(order.getOrderStatus())
             .totalPrice(order.getTotalPrice())
-            .registeredDataTime(order.getRegisteredDataTime())
+            .registeredDateTime(order.getRegisteredDateTime())
             .products(order.getOrderProducts().stream().map(OrderProduct::getProduct)
                 .map(ProductResponse::of)
                 .collect(Collectors.toList()))

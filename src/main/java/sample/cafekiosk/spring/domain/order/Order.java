@@ -35,16 +35,20 @@ public class Order extends BaseEntity {
 
     private int totalPrice;
 
-    private LocalDateTime registeredDataTime;
+    /**
+     * registeredDateTime 과 같이 등록 시간을 매개변수로 전달받지 않고, now()와 같은 기능을 사용하는 것은 지양하자
+     * 시간에 따라 테스트 성공 여부가 결정되지 않더라도, 제어할 수 있는 부분은 제어하는 것이 좋음
+     */
+    private LocalDateTime registeredDateTime;
 
     @OneToMany(mappedBy = "order", cascade = CascadeType.ALL)
     private List<OrderProduct> orderProducts;
 
    @Builder
-    private Order (List<Product> products, OrderStatus orderStatus, LocalDateTime registeredDataTime) {
+    private Order (List<Product> products, OrderStatus orderStatus, LocalDateTime registeredDateTime) {
         this.orderStatus = orderStatus;
         this.totalPrice = calculateTotalPrice(products);
-        this.registeredDataTime = registeredDataTime;
+        this.registeredDateTime = registeredDateTime;
         this.orderProducts = products.stream().map(product -> new OrderProduct(this, product))
             .collect(Collectors.toList());
 
@@ -59,7 +63,7 @@ public class Order extends BaseEntity {
         return Order.builder()
             .products(products)
             .orderStatus(OrderStatus.INIT)
-            .registeredDataTime(registeredDataTime)
+            .registeredDateTime(registeredDataTime)
             .build();
     }
 
