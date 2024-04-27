@@ -78,7 +78,7 @@ class OrderServiceTest {
         //then
         assertThat(orderResponse.getId()).isNotNull();
         assertThat(orderResponse)
-            .extracting("registeredDataTime", "totalPrice")
+            .extracting("registeredDateTime", "totalPrice")
             .contains(registeredDateTime, 3000);
         assertThat(orderResponse.getProducts()).hasSize(2)
             .extracting("productNumber", "price")
@@ -116,7 +116,7 @@ class OrderServiceTest {
         //then
         assertThat(orderResponse.getId()).isNotNull();
         assertThat(orderResponse)
-            .extracting("registeredDataTime", "totalPrice")
+            .extracting("registeredDateTime", "totalPrice")
             .contains(registeredDateTime, 10000);
         assertThat(orderResponse.getProducts()).hasSize(4)
             .extracting("productNumber", "price")
@@ -193,7 +193,7 @@ class OrderServiceTest {
         //then
         assertThat(orderResponse.getId()).isNotNull();
         assertThat(orderResponse)
-            .extracting("registeredDataTime", "totalPrice")
+            .extracting("registeredDateTime", "totalPrice")
             .contains(registeredDateTime, 2000);
         assertThat(orderResponse.getProducts()).hasSize(2)
             .extracting("productNumber", "price")

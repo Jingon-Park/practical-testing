@@ -60,7 +60,7 @@ class OrderTest {
 
     @Test
     @DisplayName("주문 생성 시 주문 생성 시간을 기록한다.")
-    void registeredDataTimeTest() {
+    void registeredDateTimeTest() {
         //given
         LocalDateTime registeredDateTime = LocalDateTime.now();
         List<Product> products = List.of(

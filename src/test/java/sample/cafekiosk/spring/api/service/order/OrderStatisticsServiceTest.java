@@ -98,7 +98,7 @@ class OrderStatisticsServiceTest {
         Order order = Order.builder()
             .products(products)
             .orderStatus(OrderStatus.PAYMENT_COMPLETED)
-            .registeredDataTime(orderTime)
+            .registeredDateTime(orderTime)
             .build();
 
         return orderRepository.save(order);

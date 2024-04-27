@@ -49,7 +49,7 @@ class OrderRepositoryTest {
 
         LocalDateTime localDateTime = LocalDateTime.of(2024, Month.APRIL, 1, 12, 30);
         Order order = Order.builder().products(products).orderStatus(OrderStatus.PAYMENT_COMPLETED)
-            .registeredDataTime(localDateTime).build();
+            .registeredDateTime(localDateTime).build();
 
         LocalDate localDate = LocalDate.of(2024, Month.APRIL, 1);
         order.setOrderStatus(OrderStatus.PAYMENT_COMPLETED);

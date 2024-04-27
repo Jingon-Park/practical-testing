@@ -8,7 +8,6 @@ import java.util.stream.Collectors;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 import sample.cafekiosk.spring.api.service.order.request.OrderCreateServiceRequest;
 import sample.cafekiosk.spring.api.service.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.order.Order;
@@ -42,21 +41,21 @@ public class OrderService {
      * optimistic lock / pessimistic lock 과 같은 lock 개념 사용을 고려
      */
     @Transactional
-    public OrderResponse createOrder(OrderCreateServiceRequest request, LocalDateTime registeredDataTime) {
+    public OrderResponse createOrder(OrderCreateServiceRequest request, LocalDateTime registeredDateTime) {
 
         List<String> productNumbers = request.getProductNumbers();
         //product
         List<Product> products = findProductsBy(productNumbers);
 
-        deductStokcQuantities(products);
+        deductStockQuantities(products);
 
-        Order order = Order.create(products, registeredDataTime);
+        Order order = Order.create(products, registeredDateTime);
         Order savedOrder = orderRepository.save(order);
         //order
         return OrderResponse.of(savedOrder);
     }
 
-    private void deductStokcQuantities(List<Product> products) {
+    private void deductStockQuantities(List<Product> products) {
         //재고 차감이 필요한 상품 필터
         List<String> stockProductNumbers = extractStockProductNumbers(products);
 

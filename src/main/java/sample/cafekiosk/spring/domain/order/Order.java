@@ -59,11 +59,11 @@ public class Order extends BaseEntity {
     }
 
 
-    public static Order create(List<Product> products, LocalDateTime registeredDataTime) {
+    public static Order create(List<Product> products, LocalDateTime registeredDateTime) {
         return Order.builder()
             .products(products)
             .orderStatus(OrderStatus.INIT)
-            .registeredDateTime(registeredDataTime)
+            .registeredDateTime(registeredDateTime)
             .build();
     }
 

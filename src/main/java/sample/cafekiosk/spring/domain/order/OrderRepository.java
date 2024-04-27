@@ -10,7 +10,7 @@ import org.springframework.stereotype.Repository;
 public interface OrderRepository extends JpaRepository<Order, Long> {
 
     @Query(value = "SELECT o FROM Order o WHERE "
-        + "o.registeredDataTime >= :startDateTime and o.registeredDataTime < :endDateTime "
+        + "o.registeredDateTime >= :startDateTime and o.registeredDateTime < :endDateTime "
         + "and o.orderStatus = :orderStatus")
     List<Order> findOrdersBy(LocalDateTime startDateTime, LocalDateTime endDateTime, OrderStatus orderStatus);
 }
