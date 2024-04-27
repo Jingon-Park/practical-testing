@@ -153,6 +153,13 @@ class OrderServiceTest {
         Stock stock1 = Stock.create("001", 2);
         Stock stock2 = Stock.create("002", 2);
 
+        /**
+         * deductQuantity를 호출을 지양해야하는 이유는 해당 테스트 코드는 Order를 생성하는 것에 대한 검증을 하는 코드인데
+         * 제고를 감소하는 로직을 수행하기 때문에 독립성이 깨진다고 볼 수 있다.
+         * 예시로 제고가 2개인데 테스트 코드에서 제고를 3 줄이려고 시도했다면 테스트 코드가 깨질 것이다.
+         * 어디에서 테스트가 실패했는지 확인하기 어렵게 하는 지점을 만들 수 있고 given절에서 테스트 코드가 깨지는 것은 독립성이
+         * 나쁘다고 할 수 있음
+         */
         stock1.deductQuantity(1); //TODO 여기서 deductQuantity를 호출하여 검증하면 안된다고 함. 이후 강의에서 확인할 예정
 
         stockRepository.saveAll(List.of(stock1, stock2));
