@@ -12,6 +12,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
+import sample.cafekiosk.spring.IntegrationTestSupport;
 import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 import sample.cafekiosk.spring.api.service.order.response.OrderResponse;
 import sample.cafekiosk.spring.domain.order.OrderRepository;
@@ -23,15 +24,14 @@ import sample.cafekiosk.spring.domain.stock.Stock;
 import sample.cafekiosk.spring.domain.stock.StockRepository;
 
 
-@ActiveProfiles("test")
-@SpringBootTest
+
 /**
  * 테스트 코드에서 Transactional 이 걸려있다면 테스트 코드에 관한 DB롤백을 해준다는 이점이 있다.
  * 하지만, 서비스 코드 외부에 Transactional 이 걸려있어야 했던 부분에 Transactional 이 없고 테스트 코드에 있다면
  * 이후 서비르 로직 수행에서는 Transactional 이 걸려있지 않아, 문제가 발생할 수 있다.
  */
 //@Transactional
-class OrderServiceTest {
+class OrderServiceTest extends IntegrationTestSupport {
 
     @Autowired
     OrderService orderService;
