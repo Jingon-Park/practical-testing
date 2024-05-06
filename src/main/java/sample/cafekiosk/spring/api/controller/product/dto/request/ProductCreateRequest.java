@@ -26,6 +26,12 @@ public class ProductCreateRequest {
     private int price;
 
 
+    /**
+     * 아래의 빌더는 테스트 코드에서만 사용한다.
+     * 상용 코드에서 사용하지 않는 테스트만을 위한 메서드를 만들어도 되는지에 대해서 생각해보면
+     * 만들어도 괜찮지만, 객체에서 해당 메서드가 존재하는 것이 어색하지 않는 선에서 만들어야한다.
+     * 예로 Getter, 기본생성자, 빌더 등이 있다.
+     */
     @Builder
     private ProductCreateRequest(ProductType type, ProductSellingStatus sellingStatus, String name,
         int price) {
