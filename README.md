@@ -48,3 +48,14 @@
 * @Mock, @MockBean, @Spy, @SpyBean, @InjectMocks
 * BDDMockito
 * Classicist vs Mockist
+
+## 키워드 정리 -7
+* 테스트 하나 당 목적은 하나
+* 완벽한 제어
+* 테스트 환경의 톡립성, 테스트 간 독립성
+* Test Fixture
+* deleteAll(), deleteAllInBatch()
+* @ParameterizedTest, @DynamicTest
+* 수행 환경 통합하기
+* Private method test
+* 테스트에서만 필요한 코드
