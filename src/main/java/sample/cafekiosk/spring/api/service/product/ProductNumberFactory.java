@@ -15,7 +15,7 @@ import sample.cafekiosk.spring.domain.product.ProductRepository;
 @RequiredArgsConstructor
 public class ProductNumberFactory {
 
-    private ProductRepository productRepository;
+    private final ProductRepository productRepository;
 
 
     public String createNextProductNumber() {

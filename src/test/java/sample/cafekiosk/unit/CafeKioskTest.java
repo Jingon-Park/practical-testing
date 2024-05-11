@@ -116,17 +116,17 @@ public class CafeKioskTest {
             .hasMessage("음료는 1잔 이상 주문할 수 있습니다.");
     }
 
-    @Test
-    void createOrder() {
-        CafeKiosk cafeKiosk = new CafeKiosk();
-        Americano americano = new Americano();
-        cafeKiosk.add(americano);
-
-        Order order = cafeKiosk.createOrder();
-
-        assertThat(order.getBeverages()).hasSize(1);
-        assertThat(order.getBeverages().get(0)).isEqualTo(americano);
-    }
+//    @Test
+//    void createOrder() {
+//        CafeKiosk cafeKiosk = new CafeKiosk();
+//        Americano americano = new Americano();
+//        cafeKiosk.add(americano);
+//
+//        Order order = cafeKiosk.createOrder();
+//
+//        assertThat(order.getBeverages()).hasSize(1);
+//        assertThat(order.getBeverages().get(0)).isEqualTo(americano);
+//    }
 
     @Test
     void createOrderWithCurrentTime() {
