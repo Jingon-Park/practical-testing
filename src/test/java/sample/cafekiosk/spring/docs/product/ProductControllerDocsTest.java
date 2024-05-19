@@ -1,5 +1,10 @@
 package sample.cafekiosk.spring.docs.product;
 
+import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
+import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
+import static org.springframework.restdocs.payload.PayloadDocumentation.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -65,37 +70,40 @@ public class ProductControllerDocsTest extends RestDocsSupport {
             )
             .andDo(print())
             .andExpect(status().isOk())
-        .andDo(MockMvcRestDocumentation.document("product-create",
-            PayloadDocumentation.requestFields(
-                PayloadDocumentation.fieldWithPath("type").type(JsonFieldType.STRING)
+        .andDo(document("product-create",
+            preprocessRequest(prettyPrint()),
+            preprocessResponse(prettyPrint()),
+            requestFields(
+                fieldWithPath("type").type(JsonFieldType.STRING)
                     .description("상품 타입"),
-                PayloadDocumentation.fieldWithPath("sellingStatus").type(JsonFieldType.STRING)
+                fieldWithPath("sellingStatus").type(JsonFieldType.STRING)
+                    .optional()
                     .description("상품 판매 상태"),
-                PayloadDocumentation.fieldWithPath("name").type(JsonFieldType.STRING)
+                fieldWithPath("name").type(JsonFieldType.STRING)
                     .description("상품 이름"),
-                PayloadDocumentation.fieldWithPath("price").type(JsonFieldType.NUMBER)
+                fieldWithPath("price").type(JsonFieldType.NUMBER)
                     .description("상품 가격")
             ),
-            PayloadDocumentation.responseFields(
-                PayloadDocumentation.fieldWithPath("code").type(JsonFieldType.NUMBER)
+            responseFields(
+                fieldWithPath("code").type(JsonFieldType.NUMBER)
                     .description("코드"),
-                PayloadDocumentation.fieldWithPath("status").type(JsonFieldType.STRING)
+                fieldWithPath("status").type(JsonFieldType.STRING)
                     .description("상태코드"),
-                PayloadDocumentation.fieldWithPath("message").type(JsonFieldType.STRING)
+                fieldWithPath("message").type(JsonFieldType.STRING)
                     .description("메시지"),
-                PayloadDocumentation.fieldWithPath("data").type(JsonFieldType.OBJECT)
+                fieldWithPath("data").type(JsonFieldType.OBJECT)
                     .description("데이터"),
-                PayloadDocumentation.fieldWithPath("data.id").type(JsonFieldType.NUMBER)
+                fieldWithPath("data.id").type(JsonFieldType.NUMBER)
                     .description("상품 id"),
-                PayloadDocumentation.fieldWithPath("data.type").type(JsonFieldType.STRING)
+                fieldWithPath("data.type").type(JsonFieldType.STRING)
                     .description("상품 타입"),
-                PayloadDocumentation.fieldWithPath("data.productNumber").type(JsonFieldType.STRING)
+                fieldWithPath("data.productNumber").type(JsonFieldType.STRING)
                     .description("상품 번호"),
-                PayloadDocumentation.fieldWithPath("data.sellingStatus").type(JsonFieldType.STRING)
+                fieldWithPath("data.sellingStatus").type(JsonFieldType.STRING)
                     .description("상품 판매 상태"),
-                PayloadDocumentation.fieldWithPath("data.name").type(JsonFieldType.STRING)
+                fieldWithPath("data.name").type(JsonFieldType.STRING)
                     .description("상품 이름"),
-                PayloadDocumentation.fieldWithPath("data.price").type(JsonFieldType.NUMBER)
+                fieldWithPath("data.price").type(JsonFieldType.NUMBER)
                     .description("상품 가격")
             )
             ));
