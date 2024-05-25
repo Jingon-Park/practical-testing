@@ -16,7 +16,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import sample.cafekiosk.spring.ControllerTestSupport;
-import sample.cafekiosk.spring.api.service.order.OrderService;
 import sample.cafekiosk.spring.api.controller.order.request.OrderCreateRequest;
 
 class OrderControllerTest extends ControllerTestSupport {

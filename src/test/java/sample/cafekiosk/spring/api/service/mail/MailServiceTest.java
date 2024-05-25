@@ -11,7 +11,6 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-import sample.cafekiosk.spring.IntegrationTestSupport;
 import sample.cafekiosk.spring.client.mail.MailClient;
 import sample.cafekiosk.spring.domain.history.MailSendHistory;
 import sample.cafekiosk.spring.domain.history.MailSendHistoryRepository;
